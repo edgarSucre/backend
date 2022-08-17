@@ -21,7 +21,7 @@ const (
 	DEFAULT_EXIT_TIMEOUT        = 3 * time.Second
 )
 
-func New(handler http.Handler, opts ...Option) *Server {
+func New(handler http.Handler, opts ...HttpServerOption) *Server {
 	s := &http.Server{
 		Handler:           handler,
 		Addr:              DEFAULT_ADDRES,

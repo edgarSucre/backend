@@ -2,33 +2,33 @@ package httpserver
 
 import "time"
 
-type Option func(*Server)
+type HttpServerOption func(*Server)
 
-func WithPort(port string) Option {
+func WithPort(port string) HttpServerOption {
 	return func(s *Server) {
 		s.instance.Addr = port
 	}
 }
 
-func WithReadTimeOut(t time.Duration) Option {
+func WithReadTimeOut(t time.Duration) HttpServerOption {
 	return func(s *Server) {
 		s.instance.ReadTimeout = t
 	}
 }
 
-func WithReadHeaderTimeOout(t time.Duration) Option {
+func WithReadHeaderTimeOout(t time.Duration) HttpServerOption {
 	return func(s *Server) {
 		s.instance.ReadHeaderTimeout = t
 	}
 }
 
-func WithWriteTimeOut(t time.Duration) Option {
+func WithWriteTimeOut(t time.Duration) HttpServerOption {
 	return func(s *Server) {
 		s.instance.WriteTimeout = t
 	}
 }
 
-func WithExitTimeOut(t time.Duration) Option {
+func WithExitTimeOut(t time.Duration) HttpServerOption {
 	return func(s *Server) {
 		s.exitTimeOut = t
 	}
