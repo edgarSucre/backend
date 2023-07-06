@@ -17,6 +17,7 @@ const (
 
 type Client struct {
 	maxPoolSize  int
+	close        <-chan struct{}
 	connAttempts int
 	connTimeout  time.Duration
 	Pool         *pgxpool.Pool
@@ -57,6 +58,13 @@ func New(url string, opts ...PostgresOption) (*Client, error) {
 
 	if err != nil {
 		return nil, fmt.Errorf("postgres - can't start client - connAttempts == 0: %w", err)
+	}
+
+	if p.close != nil {
+		go func() {
+			<-p.close
+			p.Close()
+		}()
 	}
 
 	return p, nil

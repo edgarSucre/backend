@@ -21,3 +21,9 @@ func WithConnTimeout(t time.Duration) PostgresOption {
 		p.connTimeout = t
 	}
 }
+
+func WithClosingChannel(close <-chan struct{}) PostgresOption {
+	return func(p *Client) {
+		p.close = close
+	}
+}
