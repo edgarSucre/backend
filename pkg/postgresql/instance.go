@@ -11,7 +11,7 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-func (c *client) GetInstanceSqlDB(opts UrlOpts) (*sql.DB, error) {
+func (c *Client) GetInstanceSqlDB(opts UrlOpts) (*sql.DB, error) {
 	url := opts.URL()
 
 	db, err := sql.Open("pgx", url)
@@ -28,7 +28,9 @@ func (c *client) GetInstanceSqlDB(opts UrlOpts) (*sql.DB, error) {
 	return db, nil
 }
 
-func (c *client) GetInstancePool(ctx context.Context, url string) (*pgxpool.Pool, error) {
+func (c *Client) GetInstancePool(ctx context.Context, urlOpts UrlOpts) (*pgxpool.Pool, error) {
+	url := urlOpts.URL()
+
 	// if pool is active return it
 	if c.pool != nil && c.pool.Ping(ctx) != nil {
 		return c.pool, nil
@@ -55,9 +57,5 @@ func (c *client) GetInstancePool(ctx context.Context, url string) (*pgxpool.Pool
 		attempts--
 	}
 
-	if err == nil {
-		return nil, fmt.Errorf("postgres - can't get connection from pool - pool.Ping")
-	}
-
-	return c.pool, nil
+	return nil, fmt.Errorf("postgres - can't get connection from pool - pool.Ping")
 }

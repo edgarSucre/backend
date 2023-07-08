@@ -22,16 +22,16 @@ func TestGetInstancePool(t *testing.T) {
 	workingPass := env["DB_PASS"]
 
 	cases := []struct {
-		name  string
-		url   string
-		check func(t *testing.T, pool *pgxpool.Pool, err error)
+		name    string
+		urlOpts postgresql.UrlOpts
+		check   func(t *testing.T, pool *pgxpool.Pool, err error)
 	}{
 		{
 			"success",
 			postgresql.UrlOpts{
 				User: workingUser,
 				Pass: workingPass,
-			}.URL(),
+			},
 			func(t *testing.T, pool *pgxpool.Pool, err error) {
 				if err != nil {
 					t.Errorf("expected err to be nil, got: %s", err)
@@ -51,7 +51,7 @@ func TestGetInstancePool(t *testing.T) {
 		},
 		{
 			"parseError",
-			"fail",
+			postgresql.UrlOpts{User: "\\@"},
 			func(t *testing.T, pool *pgxpool.Pool, err error) {
 				if err == nil {
 					t.Errorf("expected err to not be nil")
@@ -73,7 +73,7 @@ func TestGetInstancePool(t *testing.T) {
 			postgresql.UrlOpts{
 				User: "vito",
 				Pass: workingPass,
-			}.URL(),
+			},
 			func(t *testing.T, pool *pgxpool.Pool, err error) {
 				if err == nil {
 					t.Errorf("expected err to not be nil")
@@ -99,7 +99,7 @@ func TestGetInstancePool(t *testing.T) {
 		}
 
 		t.Run(tc.name, func(t *testing.T) {
-			instance, err := client.GetInstancePool(context.Background(), tc.url)
+			instance, err := client.GetInstancePool(context.Background(), tc.urlOpts)
 			tc.check(t, instance, err)
 		})
 	}

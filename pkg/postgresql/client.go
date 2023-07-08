@@ -12,15 +12,15 @@ const (
 	DEFAULT_POOL_CREATION_TIMEOUT  = time.Millisecond * 200
 )
 
-type client struct {
+type Client struct {
 	maxPoolSize  int
 	connAttempts int
 	connTimeout  time.Duration
 	pool         *pgxpool.Pool
 }
 
-func New(opts ...ClientOption) (*client, error) {
-	c := &client{
+func New(opts ...ClientOption) (*Client, error) {
+	c := &Client{
 		maxPoolSize:  DEFAULT_MAX_POOL_SIZE,
 		connAttempts: DEFAULT_POOL_CREATION_ATTEMPTS,
 		connTimeout:  DEFAULT_POOL_CREATION_TIMEOUT,
@@ -33,7 +33,7 @@ func New(opts ...ClientOption) (*client, error) {
 	return c, nil
 }
 
-func (c *client) Close() {
+func (c *Client) Close() {
 	if c.pool != nil {
 		c.pool.Close()
 	}
