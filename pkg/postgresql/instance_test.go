@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/edgarSucre/backend/pkg/postgresql"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 )
 
@@ -79,7 +79,7 @@ func TestGetInstancePool(t *testing.T) {
 					t.Errorf("expected err to not be nil")
 				}
 
-				msg := "can't get Pool instance"
+				msg := "can't get connection from pool"
 				if !strings.Contains(err.Error(), msg) {
 					t.Errorf("expected err to contain: %s, got: %s", msg, err)
 				}

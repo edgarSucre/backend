@@ -7,8 +7,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/jackc/pgx/v4/pgxpool"
-	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/jackc/pgx/v5/pgxpool"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 func (c *client) GetInstanceSqlDB(opts UrlOpts) (*sql.DB, error) {
@@ -43,21 +43,20 @@ func (c *client) GetInstancePool(ctx context.Context, url string) (*pgxpool.Pool
 
 	attempts := c.connAttempts
 	for attempts > 0 {
-		c.pool, err = pgxpool.ConnectConfig(ctx, poolConfig)
-		if err == nil {
-			break
+		c.pool, err = pgxpool.NewWithConfig(ctx, poolConfig)
+		if c.pool != nil && c.pool.Ping(ctx) == nil {
+			return c.pool, nil
 		}
 
 		//TODO: replace this with logrus
 		log.Printf("Postgres is trying to connect, attempts left: %d", attempts)
-
 		time.Sleep(c.connTimeout)
 
 		attempts--
 	}
 
-	if err != nil {
-		return nil, fmt.Errorf("postgres - can't get Pool instance - pgxpool.ConnectConfig: %w", err)
+	if err == nil {
+		return nil, fmt.Errorf("postgres - can't get connection from pool - pool.Ping")
 	}
 
 	return c.pool, nil
