@@ -57,7 +57,7 @@ func TestGetInstancePool(t *testing.T) {
 					t.Errorf("expected err to not be nil")
 				}
 
-				msg := "invalid pool configuration"
+				msg := "invalid pool config"
 				if !strings.Contains(err.Error(), msg) {
 					t.Errorf("expected err to contain: %s, got: %s", msg, err)
 				}

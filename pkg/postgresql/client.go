@@ -1,27 +1,29 @@
 package postgresql
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 const (
-	DEFAULT_MAX_POOL_SIZE          = 1
+	DEFAULT_MAX_POOL_CONN          = 1
 	DEFAULT_POOL_CREATION_ATTEMPTS = 10
 	DEFAULT_POOL_CREATION_TIMEOUT  = time.Millisecond * 200
 )
 
 type Client struct {
-	maxPoolSize  int
+	maxPoolConn  int
 	connAttempts int
 	connTimeout  time.Duration
 	pool         *pgxpool.Pool
+	db           *sql.DB
 }
 
 func New(opts ...ClientOption) (*Client, error) {
 	c := &Client{
-		maxPoolSize:  DEFAULT_MAX_POOL_SIZE,
+		maxPoolConn:  DEFAULT_MAX_POOL_CONN,
 		connAttempts: DEFAULT_POOL_CREATION_ATTEMPTS,
 		connTimeout:  DEFAULT_POOL_CREATION_TIMEOUT,
 	}

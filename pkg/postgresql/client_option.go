@@ -6,7 +6,7 @@ type ClientOption func(*Client)
 
 func WithMaxPoolSize(pz int) ClientOption {
 	return func(p *Client) {
-		p.maxPoolSize = pz
+		p.maxPoolConn = pz
 	}
 }
 

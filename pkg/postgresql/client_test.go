@@ -42,7 +42,7 @@ func TestClient(t *testing.T) {
 	}{
 		{connAttempts, c.connAttempts, "WithConnAttempts"},
 		{connTimeOut, c.connTimeout, "WithConnTimeout"},
-		{poolSize, c.maxPoolSize, "WithMaxPoolSize"},
+		{poolSize, c.maxPoolConn, "WithMaxPoolSize"},
 	}
 
 	// checks if the parameters were set correctly
